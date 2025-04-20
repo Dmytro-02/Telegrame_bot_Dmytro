@@ -12,7 +12,6 @@ import random
 import os
 TOKEN = os.getenv("TOKEN")
 
-
 user_data = {}
 
 def pluralizace_attempts(n):
