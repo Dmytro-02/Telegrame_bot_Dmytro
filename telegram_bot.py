@@ -1,3 +1,4 @@
+
 from telegram import Update
 from telegram.ext import (
     ApplicationBuilder,
@@ -11,7 +12,6 @@ import random
 import os
 TOKEN = os.getenv("TOKEN")
 
-#TOKEN = "7972435394:AAGQrc6T3hFYTWBXeaQOKm3GZ_Nnj0nUUpk"
 
 user_data = {}
 
@@ -160,3 +160,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
