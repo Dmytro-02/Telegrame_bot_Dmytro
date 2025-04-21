@@ -1,5 +1,5 @@
 
-from telegram import Update
+from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import (
     ApplicationBuilder,
     CommandHandler,
@@ -66,13 +66,14 @@ def check_password(guess, password):
     return correct_digits, correct_pos
 
 # --- Главное меню ---
-async def atart(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     Keyboard = [["🎯 Угадай число", "🧠 Бот угадывает"], ["⚔️ Числовой бой", "🔐 Взломай пароль"]]
-    reply_markup = ReplyKeybordMarkup(Keyboard, resize_keyboard=True)
+    reply_markup = ReplyKeyboardMarkup(Keyboard, resize_keyboard=True)
     await update.message.reply_text("👋 Привет! Во что хочешь сыграть?", reply_markup=reply_markup)
 
 # --- Оброботка выбора игры ---
 async def handle_game_choise(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print("Выбрали игру:", update.message.text)
     text = update.message.text
     if text == "🎯 Угадай число":
         await player_guess_number(update, context)
@@ -83,7 +84,7 @@ async def handle_game_choise(update: Update, context: ContextTypes.DEFAULT_TYPE)
     elif text == "🔐 Взломай пароль":
         await play_password_game(update, context)
     else:
-        await handle_guess(update, context)
+        await update.message.reply_text("Я не понял, во что ты хочешь сыграть.")
 
 # --- Игровая логика ---
 async def handle_guess(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -151,7 +152,7 @@ def main():
     app = ApplicationBuilder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, guess))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_game_choise))
     print("✅ Бот запущен")
     app.run_polling()
 
